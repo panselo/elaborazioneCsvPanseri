@@ -12,6 +12,7 @@ public class LeggiCSV {
             BufferedReader br = new BufferedReader(new FileReader(nomeFile));
             BufferedWriter bw = new BufferedWriter(new FileWriter("mioValore.csv", true));
             String next = "";
+            List<String> righe = new ArrayList<>();
             int campi;
             int num = (int) Math.floor(Math.random()*20);
             int cont = 0;
@@ -40,29 +41,49 @@ public class LeggiCSV {
                         break;
 
                     case 1:
-                        next = br.readLine();
-                        if(cont == 0){
-                            cont++;
-                            next+=";MioValore";
-                        } else {
-                            next+=";" + num;
+                        while(br.readLine() != null){
+                            next = br.readLine();
+                            if(cont == 0){
+                                cont++;
+                                next+=";MioValore";
+                            } else {
+                                next+=";" + num;
+                            }
+                            bw.write(next);
+                            break;
                         }
-                        bw.write(next);
-                        break;
 
                     case 2:
                         campi = next.split(";").length;
                         break;
 
                     case 3:
-                        //NON AVANZATO
-                        campi = next.length();
+                        int maxLunghezza = 0;
+                        for (int i = 0; i < righe.size(); i++) {
+                            next = righe.get(i);
+                            if (next.length() > maxLunghezza){
+                                maxLunghezza = next.length();
+                            }
+                        }
+                        System.out.println("Lunghezza massima: " + maxLunghezza);
                         break;
 
                     case 4:
+                        int lunghezzaMassima = 0;
+                        for (int i = 0; i < righe.size(); i++) {
+                            if (righe.get(i).length() > lunghezzaMassima) lunghezzaMassima = righe.get(i).length();
+                        }
+                        for (int i = 0; i < righe.size(); i++) {
+                            next = righe.get(i);
+                            int spaziNecessari = lunghezzaMassima - next.length();
+                            righe.set(i, next + " ".repeat(spaziNecessari));
+                        }
                         break;
 
                     case 5:
+                        System.out.print("Inserisci nuovo record: ");
+                        String nuovoRecord = in.nextLine();
+                        righe.add(nuovoRecord);
                         break;
 
                     case 6:
@@ -75,6 +96,9 @@ public class LeggiCSV {
                         break;
 
                     case 9:
+                        break;
+
+                    default:
                         break;
 
 
