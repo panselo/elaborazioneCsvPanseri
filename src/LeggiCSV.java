@@ -4,13 +4,13 @@ import java.util.*;
 public class LeggiCSV {
     public static void main(String[] args) {
 
-
         try {
 
-            File nomeFile = new File("panseri.csv");
-            File mioVal = new File("mioValore.cvs");
+            File nomeFile = new File("src/panseri.csv");
+            File mioVal = new File("src/mioValore.cvs");
+            BufferedWriter html = new BufferedWriter(new FileWriter("src/fileHtml.html"));
             BufferedReader br = new BufferedReader(new FileReader(nomeFile));
-            BufferedWriter bw = new BufferedWriter(new FileWriter("mioValore.csv", true));
+            BufferedWriter bw = new BufferedWriter(new FileWriter("src/mioValore.csv", true));
             String next = "";
             List<String> righe = new ArrayList<>();
             int campi;
@@ -32,6 +32,7 @@ public class LeggiCSV {
                 System.out.println("7. Ricercare un record per campo chiave a scelta");
                 System.out.println("8. Modificare  un record");
                 System.out.println("9. Cancellare logicamente un record");
+                System.out.println("10. Creare file html");
                 System.out.println("Inserisci la tua scelta qua (0-9): ");
                 risposta = in.nextInt();
 
@@ -87,15 +88,49 @@ public class LeggiCSV {
                         break;
 
                     case 6:
+
                         break;
 
                     case 7:
+
                         break;
 
                     case 8:
+
                         break;
 
                     case 9:
+
+                        break;
+
+                    case 10:
+
+                        html.write("<html>\n<head>\n<title>File CSV</title>\n</head>\n<body>\n");
+                        html.write("<table border=\"1\">\n");
+
+                        List<String[]> csvData = new ArrayList<>();
+                        while ((next = br.readLine()) != null) {
+                            String[] records = next.split(";");
+                            csvData.add(records);
+                        }
+
+                        html.write("<thead><tr>");
+                        html.write("<th>Anno</th><th>Provincia</th><th>Minori</th><th>Giovani</th><th>Adulti</th>");
+                        html.write("<th>Anziani</th><th>Età</th><th>Mista</th><th>Tutte le età</th><th>Totale</th>");
+                        html.write("</tr></thead>\n");
+
+                        html.write("<tbody>\n");
+                        for (String[] record : csvData) {
+                            html.write("<tr>");
+                            for (String field : record) {
+                                html.write("<td>" + field + "</td>");
+                            }
+                            html.write("</tr>\n");
+                        }
+                        html.write("</tbody>\n");
+
+                        html.write("</table>\n</body>\n</html>");
+
                         break;
 
                     default:
@@ -106,8 +141,11 @@ public class LeggiCSV {
 
             }while(next != null);
 
-
+            html.flush();
+            html.close();
             br.close();
+            bw.flush();
+            bw.close();
         } catch (IOException e) {
             System.out.println("Errore nella lettura del file!!!!!!");
             e.printStackTrace();
